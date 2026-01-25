@@ -40,7 +40,7 @@ func setPlatform() string {
 		6: "xboxseries",
 	}
 
-	fmt.Println("Select platform from availble (enter only digit)")
+	fmt.Println("Select platform from available (enter only digit)")
 	keys := getKeys(availablePlatforms)
 
 	for key := range keys {
@@ -52,7 +52,7 @@ func setPlatform() string {
 	result, found := availablePlatforms[platform]
 
 	if !found {
-		fmt.Println("You select unsuppirted platform, setted PC by default")
+		fmt.Println("You select unsupported platform, setted PC by default")
 	}
 	return result
 }
