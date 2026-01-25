@@ -11,13 +11,13 @@ build:
 	make build_win
 
 build_linux:
-	GOOS=linux GOARCH=amd64 go build -o ./bin/redsec_revives_linux ./src
+	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o ./bin/redsec_revives_linux ./src
 
 build_macos:
-	GOOS=darwin GOARCH=arm64 go build -o ./bin/redsec_revives_macos ./src
+	GOOS=darwin GOARCH=arm64 go build -ldflags "-s -w" -o ./bin/redsec_revives_macos ./src
 	
 build_win:
-	GOOS=windows GOARCH=amd64 go build -o ./bin/redsec_revives_win.exe ./src
+	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o ./bin/redsec_revives_win.exe ./src
 	
 clean:
 	rm ./bin/*
