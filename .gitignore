@@ -1,3 +1,4 @@
 .DS_Store
+/bin
 example.json
 example_short.json

@@ -24,11 +24,11 @@ func fetchRSReviveStat(url string) {
 		log.Fatalln(err)
 	}
 
-	result := unmarshalJSON(body)
+	result := unmarshalPlayerStats(body)
 	fmt.Printf("Total revives in all RedSec modes: %d\n", result)
 }
 
-func unmarshalJSON(data []byte) int {
+func unmarshalPlayerStats(data []byte) int {
 	var playerStats models.RawData
 
 	err := json.Unmarshal(data, &playerStats)
@@ -38,7 +38,7 @@ func unmarshalJSON(data []byte) int {
 
 	stats := playerStats.Stats
 	if len(stats) == 0 {
-		fmt.Println("Nothing found")
+		log.Fatalln("Nothing found")
 	}
 
 	fields := stats[0].Categories[0].Fields
