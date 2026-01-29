@@ -30,14 +30,17 @@ func setUsername() string {
 func setPlatform() string {
 	var platform int
 
+	// in API ps4 and xboxone available as well,
+	// but BF6 not availble on those platforms.
+	// left them commented for a while
 	availablePlatforms := map[int]string{
 		0: "pc",
 		1: "psn",
 		2: "ps5",
-		3: "ps4",
-		4: "xbox",
-		5: "xboxone",
-		6: "xboxseries",
+		3: "xbox",
+		4: "xboxseries",
+		// 5: "ps4",
+		// 6: "xboxone",
 	}
 
 	fmt.Println("Select platform from available (enter only digit)")

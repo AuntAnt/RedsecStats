@@ -15,7 +15,11 @@ func fetchRSReviveStat(url string) {
 		log.Fatalln(err)
 	}
 
-	log.Printf("Response code: %d\n", resp.StatusCode)
+	log.Printf("Response code: %s\n", resp.Status)
+
+	if resp.StatusCode != 200 {
+		log.Fatalln("Something went wrong")
+	}
 
 	defer resp.Body.Close()
 
@@ -36,12 +40,10 @@ func unmarshalPlayerStats(data []byte) int {
 		log.Fatalln(err)
 	}
 
-	stats := playerStats.Stats
-	if len(stats) == 0 {
+	fields := playerStats.Stats[0].Categories[0].Fields
+	if len(fields) == 0 {
 		log.Fatalln("Nothing found")
 	}
-
-	fields := stats[0].Categories[0].Fields
 
 	var totalRSRevives int
 	for _, field := range fields {
