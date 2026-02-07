@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"slices"
 
 	"github.com/AuntAnt/RedsecStats/src/models"
 )
@@ -54,8 +55,8 @@ func unmarshalPlayerStats(data []byte) StatResult {
 		log.Fatalln(err)
 	}
 
-	fields := playerStats.Stats[0].Categories[0].Fields
-	if len(fields) == 0 {
+	categoryFields := playerStats.Stats[0].Categories[0].Fields
+	if len(categoryFields) == 0 {
 		log.Fatalln("Nothing found")
 	}
 
@@ -63,18 +64,16 @@ func unmarshalPlayerStats(data []byte) StatResult {
 	var totalStuns int
 	var totalBrPlayed int
 
-	for _, field := range fields {
-		switch field.Name {
+	for _, catField := range categoryFields {
+		switch catField.Name {
 		case revives:
-			totalRSRevives = field.Value
+			totalRSRevives = catField.Value
 		case stuns:
-			for _, f := range field.Fields {
-				if f.CheckIfGranite() {
-					totalStuns += field.Value
-				}
+			if slices.ContainsFunc(catField.Fields, func(f models.Fields) bool { return f.CheckIfGranite() }) {
+				totalStuns += catField.Value
 			}
 		case playedDuo, playedBr:
-			totalBrPlayed += field.Value
+			totalBrPlayed += catField.Value
 		}
 	}
 
