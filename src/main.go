@@ -56,6 +56,7 @@ func setPlatform() string {
 
 	if !found {
 		fmt.Println("You select unsupported platform, setted PC by default")
+		return "pc"
 	}
 	return result
 }
