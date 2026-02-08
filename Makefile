@@ -10,6 +10,9 @@ build:
 	make build_linux
 	make build_win
 
+build_debug:
+	go build -tags=debug -o ./bin/stats_debug ./src
+
 build_linux:
 	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o ./bin/redsec_stats_linux ./src
 

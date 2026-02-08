@@ -9,6 +9,7 @@ import (
 	"slices"
 
 	"github.com/AuntAnt/RedsecStats/src/models"
+	"github.com/AuntAnt/RedsecStats/src/utils"
 )
 
 const (
@@ -39,6 +40,10 @@ func fetchRSReviveStat(url string) {
 		log.Fatalln(err)
 	}
 
+	// write full response body to file in debug mode
+	if utils.Debug {
+		writeResponseBody(body)
+	}
 	result := unmarshalPlayerStats(body)
 
 	fmt.Println("\nRedSec statistic")
