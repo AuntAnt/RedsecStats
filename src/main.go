@@ -34,7 +34,7 @@ func setPlatform() string {
 	// but BF6 not availble on those platforms.
 	// left them commented for a while
 	availablePlatforms := map[int]string{
-		0: "pc",
+		0: "pc(ea)",
 		1: "psn",
 		2: "ps5",
 		3: "xbox",
@@ -43,7 +43,9 @@ func setPlatform() string {
 		// 6: "xboxone",
 	}
 
-	fmt.Println("Select platform from available (enter only digit)")
+	fmt.Println("  -- IMPORTANT --")
+	fmt.Println("If your PSN/Xbox account name is different from your EA account name, select PC and enter your EA account")
+	fmt.Println("\nSelect platform from available (enter only digit)")
 	keys := getKeys(availablePlatforms)
 
 	for key := range keys {
