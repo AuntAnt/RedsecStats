@@ -47,9 +47,9 @@ func fetchRSReviveStat(url string) {
 	result := unmarshalPlayerStats(body)
 
 	fmt.Println("\nRedSec statistic")
-	fmt.Printf("  BR Played  |  %d  \n", result.played)
-	fmt.Printf("  Stuns      |  %d  \n", result.stuns)
 	fmt.Printf("  Revives    |  %d  \n", result.revives)
+	fmt.Printf("  BR Played  |  %d  \n", result.played)
+	fmt.Printf("  Stuns      |  %d  - MAY BE COMPLETELY INCORRECT\n", result.stuns)
 }
 
 func unmarshalPlayerStats(data []byte) StatResult {

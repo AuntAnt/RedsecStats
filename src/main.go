@@ -18,6 +18,10 @@ func main() {
 
 	url := fmt.Sprintf(baseUrl, username, platform)
 	fetchRSReviveStat(url)
+
+	var stopKey string
+	fmt.Println("\nPress Enter key to exit")
+	fmt.Scanln(&stopKey)
 }
 
 func setUsername() string {
