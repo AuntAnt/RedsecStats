@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -19,50 +19,52 @@ const (
 	revives   = "revives_gm_granite"
 )
 
-func fetchRSReviveStat(url string) {
+func fetchStatistic(url string) (*StatResult, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
 	log.Printf("Response code: %s\n", resp.Status)
 
 	if resp.StatusCode == 404 {
-		log.Fatalln("Player not found")
+		return nil, errors.New("Player not found")
 	} else if resp.StatusCode != 200 {
-		log.Fatalln("Something went wrong")
+		return nil, errors.New("Something went wrong")
 	}
 
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return nil, err
 	}
 
 	// write full response body to file in debug mode
 	if utils.Debug {
 		writeResponseBody(body)
 	}
-	result := unmarshalPlayerStats(body)
+	result, err := unmarshalPlayerStats(body)
 
-	fmt.Println("\nRedSec statistic")
-	fmt.Printf("  Revives    |  %d  \n", result.revives)
-	fmt.Printf("  BR Played  |  %d  \n", result.played)
-	fmt.Printf("  Stuns      |  %d  - MAY BE COMPLETELY INCORRECT\n", result.stuns)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
-func unmarshalPlayerStats(data []byte) StatResult {
+func unmarshalPlayerStats(data []byte) (*StatResult, error) {
 	var playerStats models.RawData
 
 	err := json.Unmarshal(data, &playerStats)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
 	categoryFields := playerStats.Stats[0].Categories[0].Fields
 	if len(categoryFields) == 0 {
-		log.Fatalln("Nothing found")
+		return nil, errors.New("Nothing found")
 	}
 
 	var totalRSRevives int
@@ -82,11 +84,13 @@ func unmarshalPlayerStats(data []byte) StatResult {
 		}
 	}
 
-	return StatResult{
+	result := StatResult{
 		revives: totalRSRevives,
 		stuns:   totalStuns,
 		played:  totalBrPlayed,
 	}
+
+	return &result, nil
 }
 
 type StatResult struct {

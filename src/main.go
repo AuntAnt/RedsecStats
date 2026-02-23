@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"os/exec"
+	"runtime"
 	"slices"
 )
 
@@ -17,11 +20,26 @@ func main() {
 	log.Printf("Fetching statistic for %s, platform: %s\n", username, platform)
 
 	url := fmt.Sprintf(baseUrl, username, platform)
-	fetchRSReviveStat(url)
+	res, err := fetchStatistic(url)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("\nRedSec statistic")
+		fmt.Printf("  Revives    |  %d  \n", res.revives)
+		fmt.Printf("  BR Played  |  %d  \n", res.played)
+		fmt.Printf("  Stuns      |  %d  - MAY BE COMPLETELY INCORRECT\n", res.stuns)
+	}
 
-	var stopKey string
-	fmt.Println("\nPress Enter key to exit")
-	fmt.Scanln(&stopKey)
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("cmd", "/c", "pause")
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Run()
+	} else {
+		fmt.Println("\nPress Enter key to exit")
+		fmt.Scanln()
+	}
 }
 
 func setUsername() string {
